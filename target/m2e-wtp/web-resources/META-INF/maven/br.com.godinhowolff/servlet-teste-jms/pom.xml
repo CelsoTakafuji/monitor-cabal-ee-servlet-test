@@ -1,0 +1,223 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>br.com.godinhowolff</groupId>
+	<artifactId>servlet-teste-jms</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<distribution>repo</distribution>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+		</license>
+	</licenses>
+	<properties>
+
+		<version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
+		<version.jboss.spec.javaee.7.0>1.0.3.Final</version.jboss.spec.javaee.7.0>
+		<version.compiler.plugin>3.1</version.compiler.plugin>
+		<version.war.plugin>2.5</version.war.plugin>
+		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.source>1.7</maven.compiler.source>
+	</properties>
+
+	   <dependencyManagement>
+        <dependencies>
+            <!-- Define the version of JBoss' Java EE 7 APIs we want to use -->
+            <!-- JBoss distributes a complete set of Java EE 7 APIs including
+                a Bill of Materials (BOM). A BOM specifies the versions of a "stack" (or
+                a collection) of artifacts. We use this here so that we always get the correct
+                versions of artifacts. Here we use the jboss-javaee-7.0 stack (you can read
+                this as the JBoss stack of the Java EE 7 APIs). You can actually use this
+                stack with any version of WildFly that implements Java EE 7, not just JBoss
+                WildFly 8! -->
+            <dependency>
+                <groupId>org.jboss.spec</groupId>
+                <artifactId>jboss-javaee-all-7.0</artifactId>
+                <version>${version.jboss.spec.javaee.7.0}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- Incluindo Monitor Cabal EE Novo utilizando ActiveMQ -->
+		<dependency>
+		  <groupId>br.com.sippe.issuer.transaction.monitor</groupId>
+		  <artifactId>transaction-monitor-client</artifactId>
+		  <version>2.2.0-SNAPSHOT</version>
+		</dependency>
+    
+        <!-- Import the Servlet API, we use provided scope as the API is
+            included in WildFly 8 -->
+        <dependency>
+            <groupId>org.jboss.spec.javax.servlet</groupId>
+            <artifactId>jboss-servlet-api_3.1_spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.spec.javax.ejb</groupId>
+            <artifactId>jboss-ejb-api_3.2_spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+		  <groupId>org.apache.qpid</groupId>
+		  <artifactId>qpid-jms-client</artifactId>
+		  <version>0.41.0</version>
+		</dependency>
+		
+<!--  
+		<dependency>
+		  <groupId>org.apache.activemq</groupId>
+		  <artifactId>activemq-all</artifactId>
+		  <version>5.15.8</version>
+		</dependency>
+-->
+		
+	<!--  
+		<dependency>
+		  <groupId>org.apache.activemq</groupId>
+		  <artifactId>activemq-ra</artifactId>
+		  <version>5.15.8</version>
+		  <classifier>sources</classifier>
+		</dependency> 
+	-->
+
+<!--
+<dependency>
+    <groupId>org.jboss.spec.javax.jms</groupId>
+    <artifactId>jboss-jms-api_2.0_spec</artifactId>
+    <scope>provided</scope>
+</dependency>
+-->
+<!--  
+<dependency>
+	<groupId>org.apache.activemq</groupId>
+	<artifactId>activemq-client</artifactId>
+	<version>5.15.7</version>
+</dependency>
+-->
+<!--  
+<dependency>  
+    <groupId>org.wildfly</groupId>  
+    <artifactId>wildfly-jms-client-bom</artifactId>  
+    <version>10.0.0.Final</version>  
+    <type>pom</type>  
+</dependency>  
+-->
+<!--  
+<dependency>
+  <groupId>org.apache.activemq</groupId>
+  <artifactId>apache-artemis</artifactId>
+  <version>2.6.3</version>
+  <type>pom</type>
+</dependency>
+-->
+<!--
+<dependency>
+  <groupId>org.apache.activemq</groupId>
+  <artifactId>artemis-ra</artifactId>
+  <version>1.5.1</version>
+</dependency>
+-->
+<!--
+<dependency>
+  <groupId>org.jboss.ironjacamar</groupId>
+  <artifactId>ironjacamar-core-impl</artifactId>
+  <version>1.4.12.Final</version>
+</dependency>
+-->
+<!--
+<dependency>
+  <groupId>org.apache.activemq</groupId>
+  <artifactId>artemis-jms-client-all</artifactId>
+  <version>2.6.3</version>
+</dependency>
+-->	
+<!--  
+<dependency>
+    <groupId>org.jboss.ejb3</groupId>
+    <artifactId>jboss-ejb3-ext-api</artifactId>
+    <version>1.1.0</version>
+</dependency>
+-->
+<!--  
+<dependency>
+	<groupId>org.apache.activemq</groupId>
+	<artifactId>activemq-broker</artifactId>
+	<version>5.14.0</version>
+</dependency>
+-->
+<!-- 
+<dependency>
+    <groupId>javax.enterprise</groupId>
+    <artifactId>cdi-api</artifactId>
+    <scope>provided</scope>
+</dependency>
+  -->
+    </dependencies>
+
+    <build>
+        <!-- Set the name of the war, used as the context root when the app
+            is deployed -->
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${version.war.plugin}</version>
+                <configuration>
+                    <!-- Java EE 7 doesn't require web.xml, Maven needs to
+                        catch up! -->
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+            <!-- WildFly plugin to deploy war -->
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>${version.wildfly.maven.plugin}</version>
+            </plugin>
+            <!-- Compiler plugin enforces Java 1.6 compatibility and activates
+                annotation processors -->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${version.compiler.plugin}</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <profiles>
+        <profile>
+            <!-- When built in OpenShift the 'openshift' profile will be
+                used when invoking mvn. -->
+            <!-- Use this profile for any OpenShift specific customization
+                your app will need. -->
+            <!-- By default that is to put the resulting archive into the
+                'deployments' folder. -->
+            <!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
+            <id>openshift</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>${version.war.plugin}</version>
+                        <configuration>
+                            <outputDirectory>deployments</outputDirectory>
+                            <warName>ROOT</warName>
+                            <!-- Java EE 7 doesn't require web.xml, Maven
+                                needs to catch up! -->
+                            <failOnMissingWebXml>false</failOnMissingWebXml>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

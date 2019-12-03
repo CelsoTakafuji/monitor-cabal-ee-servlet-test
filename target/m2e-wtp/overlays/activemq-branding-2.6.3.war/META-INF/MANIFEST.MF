@@ -1,0 +1,43 @@
+Manifest-Version: 1.0
+Bundle-License: https://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-SymbolicName: org.apache.activemq.activemq-branding
+Archiver-Version: Plexus Archiver
+Built-By: clebertsuconic
+Bnd-LastModified: 1535677021460
+ActiveMQ-Version: 2.6.3(129,128,127,126,125,124,123,122)
+Bundle-DocURL: https://www.apache.org/
+Import-Package: javax.management;resolution:=optional,org.slf4j;resolu
+ tion:=optional;version="[1.7,2)",javax.servlet
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+Bundle-Name: The Apache Software Foundation provides support for the A
+ pache community of open-source software projects.The Apache projects 
+ are characterized by a collaborative, consensus based development pro
+ cess, an open andpragmatic software license, and a desire to create h
+ igh quality software that leads the way in its field.We consider ours
+ elves not simply a group of projects sharing a server, but rather a c
+ ommunity of developersand users.
+Web-ContextPath: /activemq-branding
+Bundle-Description: The Apache Software Foundation provides support fo
+ r the Apache community of open-source software projects.    The Apach
+ e projects are characterized by a collaborative, consensus based deve
+ lopment process, an open and    pragmatic software license, and a des
+ ire to create high quality software that leads the way in its field. 
+    We consider ourselves not simply a group of projects sharing a ser
+ ver, but rather a community of developers    and users.
+Implementation-Title: HawtIO
+Embed-Directory: WEB-INF/lib
+Implementation-Version: 2.6.3
+Bundle-ManifestVersion: 2
+Embed-Dependency: *;scope=compile|runtime
+Bundle-Vendor: The Apache Software Foundation
+Tool: Bnd-3.0.0.201509101326
+Embedded-Artifacts: WEB-INF/lib/hawtio-plugin-mbean-1.5.5.jar;g="io.ha
+ wt";a="hawtio-plugin-mbean";v="1.5.5"
+Bundle-Version: 2.6.3
+Bundle-ClassPath: .,WEB-INF/classes,WEB-INF/lib/hawtio-plugin-mbean-1.
+ 5.5.jar
+Embed-Transitive: true
+Created-By: Apache Maven Bundle Plugin
+Build-Jdk: 1.8.0_73
+Webapp-Context: /activemq-branding
+

@@ -1,0 +1,15 @@
+// ------------------------------------------------------------------
+// Transitive dependencies of this project determined from the
+// maven pom organized by organization.
+// ------------------------------------------------------------------
+
+ActiveMQ Artemis Console
+
+
+From: 'JBoss by Red Hat' (http://www.jboss.org)
+  - hawtio-web (http://hawt.io/hawtio-web/) io.hawt:hawtio-web:war:1.5.5
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+
+
+
