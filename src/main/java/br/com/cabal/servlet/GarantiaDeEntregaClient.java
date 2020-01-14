@@ -1,11 +1,11 @@
 package br.com.cabal.servlet;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Properties;
 
+import javax.jms.JMSException;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.QueueConnection;
@@ -56,10 +56,10 @@ public class GarantiaDeEntregaClient extends HttpServlet {
 			out.println(" ");
 			out.println("		<form method=\"post\" action=\"EnviaMensagemParaFila\"> ");
 			out.println(" ");
-			out.println("			<div class=\"form-group row\"> ");
+			out.println("			<div class=\"form-group row\"> "); // NOSONAR
 			out.println("				<label class=\"ml-5 col-sm-2 col-form-label\">Mensagem Iso In:</label> ");
 			out.println("				<textarea class=\"col-sm-8\" id=\"msgIn\" name=\"msgIn\" rows=\"3\">0200FEFB4601A8E1E20A000000000004000416512707003774083400000000000000251500000000251500000000251510211805256100000061000000147827150525102110211020546205100209998653213109000000532375127070037740834=230320142000000000003932858     WY456527044906722      CEMAR PAES E CONVENIEN BRASILIA      BRA001R9869869862049F2608C9D8411A5C9DBD839F2701809F10120010A50003020000000000000000000000FF9F37044B89F3A39F36020251950580000080009A031810219C01009F02060000000025155F2A020986820218009F1A0200769F34034103029F3303E0D0C89F350122026000000000030107672015535  012MS25791410070070803MSI050006P7E009HISFNX                                   </textarea> ");
-			out.println("			</div> ");
+			out.println("			</div> ");                         // NOSONAR
 			out.println(" ");
 			out.println("			<div class=\"form-group row\"> ");
 			out.println("				<label class=\"ml-5 col-sm-2 col-form-label\">Mensagem Iso Out:</label> ");
@@ -127,11 +127,13 @@ public class GarantiaDeEntregaClient extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		final Context ctx;
 		final Queue queue;
-		QueueConnection queueConnection = null;
-		QueueSession queueSession = null;
-		QueueSender sender = null;
+
 		final ObjectMessage msgObj;
 
+		QueueConnection queueConnection = null;
+		QueueSession queueSession = null;
+		QueueSender queueSender = null;
+		
 		try {
 			
 			Properties prop = getProp();
@@ -145,7 +147,7 @@ public class GarantiaDeEntregaClient extends HttpServlet {
 			queueConnection = factory.createQueueConnection(prop.getProperty("connectionfactory.Username"), prop.getProperty("connectionfactory.Password"));
 			queueSession = queueConnection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
 
-			sender = queueSession.createSender(queue);
+			queueSender = queueSession.createSender(queue);
 			msgObj = queueSession.createObjectMessage();
 
 			final String msgStringIsoIn = req.getParameter("msgIn");
@@ -160,24 +162,34 @@ public class GarantiaDeEntregaClient extends HttpServlet {
 
 			msgObj.setObject(bean);
 
-			sender.send(msgObj);
+			queueSender.send(msgObj);
 		} catch (Exception e) {
 			logger.error("Erro ao enviar mensagem! Motivo: " + e.getMessage());
 		} finally {
-			closeQuietly((Closeable) queueConnection);
-			closeQuietly((Closeable) queueSession);
-			closeQuietly((Closeable) sender);
+			if (queueConnection != null) {
+                try {
+                	queueConnection.close();
+                } catch (JMSException je) {
+                	logger.error("Erro ao fechar QueueConnection! Motivo: " + je.getMessage());
+                }
+            }
+			
+			if (queueSession != null) {
+                try {
+                	queueSession.close();
+                } catch (JMSException je) {
+                	logger.error("Erro ao fechar QueueSession! Motivo: " + je.getMessage());
+                }
+            }
+			
+			if (queueSender != null) {
+                try {
+                	queueSender.close();
+                } catch (JMSException je) {
+                	logger.error("Erro ao fechar QueueSender! Motivo: " + je.getMessage());
+                }
+            }
 		}
 	}
-    
-    public void closeQuietly(Closeable closeable) {
-        if (closeable != null) {
-            try {
-                closeable.close();
-            } catch (IOException ex) {
-            	logger.error("Erro ao fechar objeto: " + closeable.toString() + "! Motivo: " + ex.getMessage());
-            }
-        }
-    }
 
 }
